@@ -1,0 +1,2277 @@
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f7fb;
+    color: #1e293b;
+}
+
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    background: #111827;
+    color: white;
+    padding: 28px 20px;
+    flex-shrink: 0;
+}
+
+.sidebar h2 {
+    font-size: 21px;
+    margin: 0;
+}
+
+.sidebar-subtitle {
+    color: #9ca3af;
+    font-size: 13px;
+    margin-bottom: 35px;
+}
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.nav-btn {
+    width: 100%;
+    border: none;
+    padding: 14px;
+    text-align: left;
+    border-radius: 10px;
+    background: transparent;
+    color: #cbd5e1;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.nav-btn:hover,
+.nav-btn.active {
+    background: #2563eb;
+    color: white;
+}
+
+.main-content {
+    flex: 1;
+    padding: 35px;
+    min-width: 0;
+}
+
+.topbar {
+    margin-bottom: 30px;
+}
+
+.topbar h1 {
+    margin: 0 0 8px;
+    font-size: 30px;
+}
+
+.topbar p {
+    color: #64748b;
+    margin: 0;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.card,
+.panel {
+    background: transparent;
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.card h3 {
+    color: #64748b;
+    font-size: 15px;
+}
+
+.card h2 {
+    font-size: 30px;
+    color: #2563eb;
+}
+
+.panel {
+    margin-bottom: 20px;
+}
+
+.panel h2 {
+    font-size: 20px;
+    margin-top: 0;
+}
+
+.data-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 12px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.data-row strong {
+    text-align: right;
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+@media (max-width: 700px) {
+    .app-layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .sidebar nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .nav-btn {
+        width: auto;
+    }
+
+    .main-content {
+        padding: 20px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+.pay-btn {
+    background: #0070ba;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.pay-btn:hover {
+    background: #005ea6;
+}
+
+
+/* Create Order Modal */
+.order-modal:not([hidden]) {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(15, 23, 42, 0.65);
+    padding: 20px;
+}
+
+.order-modal[hidden] {
+    display: none !important;
+}
+
+.order-modal-content {
+    background: transparent;
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.order-modal-content h3 {
+    margin: 0 0 22px;
+    font-size: 22px;
+}
+
+#create-order-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#create-order-form label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 6px;
+}
+
+#create-order-form input,
+#create-order-form select {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: transparent;
+    font-size: 14px;
+}
+
+#create-order-form input:focus,
+#create-order-form select:focus {
+    outline: 2px solid #6366f1;
+    outline-offset: 1px;
+}
+
+.order-form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.order-form-actions button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+#save-order-btn {
+    background: #4f46e5;
+    color: white;
+}
+
+#cancel-order-btn {
+    background: #e2e8f0;
+    color: #334155;
+}
+
+#add-order-btn {
+    padding: 10px 18px;
+    background: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.orders-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+#order-form-message {
+    font-size: 14px;
+    margin: 4px 0;
+}
+
+
+/* Merchant Evaluation Button - Same as Create Order */
+#add-review-btn {
+    background-color: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+#add-review-btn:hover {
+    background-color: #4338ca;
+}
+
+
+/* Merchant Evaluation Form Layout */
+#merchant-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#merchant-form label {
+    font-weight: 500;
+    margin-top: 8px;
+}
+
+#merchant-form input,
+#merchant-form select,
+#merchant-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+#merchant-form textarea {
+    resize: vertical;
+    min-height: 110px;
+}
+
+#merchant-form input:focus,
+#merchant-form select:focus,
+#merchant-form textarea:focus {
+    outline: none;
+    border-color: #4f46e5;
+}
+
+#merchant-form .order-form-actions {
+    margin-top: 15px;
+}
+
+
+/* ==========================================
+   BUYWISE AI - DASHBOARD MOMO GUIDED TOUR
+   ========================================== */
+
+.bw-tour-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 20000;
+    pointer-events: none;
+    font-family: Arial, sans-serif;
+}
+
+.bw-tour-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(23, 15, 52, 0.46);
+    pointer-events: auto;
+}
+
+/* Highlight selected dashboard section */
+.bw-tour-highlight {
+    position: relative !important;
+    z-index: 20001 !important;
+    outline: 3px solid #a78bfa !important;
+    outline-offset: 5px;
+    border-radius: 12px;
+    box-shadow:
+        0 0 0 7px rgba(167, 139, 250, 0.18),
+        0 0 25px rgba(139, 92, 246, 0.35);
+}
+
+/* Purple Momo dialogue */
+.bw-tour-speech {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: min(370px, calc(100vw - 32px));
+    max-height: calc(100vh - 32px);
+    overflow: visible;
+    background: #ffffff;
+    color: #31215a;
+    border: 2px solid #c4b5fd;
+    border-radius: 20px;
+    padding: 24px 22px 20px;
+    box-shadow:
+        0 15px 50px rgba(76, 29, 149, 0.25),
+        0 0 0 5px rgba(196, 181, 253, 0.16);
+    z-index: 20002;
+    pointer-events: auto;
+    opacity: 0;
+    transition:
+        left 0.55s ease,
+        top 0.55s ease,
+        opacity 0.35s ease;
+}
+
+.bw-tour-speech.bw-tour-arrived {
+    opacity: 1;
+}
+
+/* Momo mascot */
+.bw-tour-mascot {
+    position: absolute;
+    top: -62px;
+    right: 10px;
+    width: 95px;
+    height: 95px;
+    animation: bw-momo-float 2.5s ease-in-out infinite;
+}
+
+.bw-tour-mascot img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(
+        0 6px 7px rgba(76, 29, 149, 0.2)
+    );
+}
+
+@keyframes bw-momo-float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-9px);
+    }
+}
+
+/* Header */
+.bw-tour-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+#bw-tour-progress {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    color: #7c3aed;
+}
+
+#bw-tour-close {
+    border: none;
+    background: transparent;
+    color: #8b5cf6;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0 4px;
+}
+
+/* Title */
+#bw-tour-title {
+    margin: 0 0 12px;
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1.35;
+    color: #4c1d95;
+}
+
+/* Typing dialogue */
+#bw-tour-description {
+    min-height: 76px;
+    margin: 0 0 20px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #5b4b78;
+    white-space: pre-wrap;
+}
+
+/* Back and Continue buttons */
+.bw-tour-controls {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+}
+
+.bw-tour-controls button {
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+#bw-tour-back {
+    background: #f5f3ff;
+    border: 1px solid #ddd6fe;
+    color: #6d28d9;
+}
+
+#bw-tour-back:hover:not(:disabled) {
+    background: #ede9fe;
+}
+
+#bw-tour-back:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+#bw-tour-next {
+    background: linear-gradient(
+        135deg,
+        #8b5cf6,
+        #6d28d9
+    );
+    border: none;
+    color: white;
+}
+
+#bw-tour-next:hover {
+    background: linear-gradient(
+        135deg,
+        #7c3aed,
+        #5b21b6
+    );
+    transform: translateY(-1px);
+}
+
+/* Smaller screens */
+@media (max-width: 700px) {
+    .bw-tour-speech {
+        padding: 20px 16px 16px;
+        max-height: calc(100vh - 40px);
+        overflow-y: auto;
+    }
+
+    #bw-tour-title {
+        font-size: 18px;
+    }
+
+    #bw-tour-description {
+        font-size: 13px;
+    }
+
+    .bw-tour-mascot {
+        width: 70px;
+        height: 70px;
+        top: -45px;
+    }
+
+    .bw-tour-controls button {
+        padding: 9px 12px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bw-tour-speech,
+    .bw-tour-controls button {
+        transition: none;
+    }
+
+    .bw-tour-mascot {
+        animation: none;
+    }
+}
+
+
+/* =========================================
+   BUYWISE AI — STANDARDISED UI
+   Purple + White Theme
+   ========================================= */
+
+:root {
+    --bw-primary: #7c3aed;
+    --bw-primary-dark: #6d28d9;
+    --bw-primary-light: #f3e8ff;
+    --bw-background: #f8f7fc;
+    --bw-surface: #ffffff;
+    --bw-text: #241b35;
+    --bw-muted: #756c86;
+    --bw-border: #e9e3f2;
+    --bw-radius: 16px;
+    --bw-shadow: 0 5px 22px rgba(70, 38, 115, 0.06);
+}
+
+/* General */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--bw-background);
+    color: var(--bw-text);
+}
+
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    background: #241638;
+    color: white;
+    padding: 28px 20px;
+}
+
+.sidebar h2 {
+    font-size: 21px;
+    font-weight: 800;
+    margin: 0;
+    color: white;
+}
+
+.sidebar-subtitle {
+    color: #c5b8d8;
+    font-size: 13px;
+    margin-bottom: 35px;
+}
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.nav-btn {
+    width: 100%;
+    padding: 14px 16px;
+    border: none;
+    border-radius: 12px;
+    background: transparent;
+    color: #ded5ed;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.nav-btn:hover {
+    background: rgba(167, 139, 250, 0.18);
+    color: white;
+}
+
+.nav-btn.active {
+    background: var(--bw-primary);
+    color: white;
+    box-shadow: 0 5px 15px rgba(124, 58, 237, 0.25);
+}
+
+/* Main content */
+.main-content {
+    flex: 1;
+    min-width: 0;
+    padding: 35px;
+    background: var(--bw-background);
+}
+
+.topbar {
+    margin-bottom: 30px;
+}
+
+.topbar h1 {
+    margin: 0 0 8px;
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--bw-text);
+}
+
+.topbar p {
+    margin: 0;
+    color: var(--bw-muted);
+    font-size: 14px;
+}
+
+/* Dashboard cards */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.card,
+.panel {
+    background: var(--bw-surface);
+    border: 1px solid var(--bw-border);
+    border-radius: var(--bw-radius);
+    padding: 24px;
+    box-shadow: var(--bw-shadow);
+}
+
+.card h3 {
+    margin-top: 0;
+    font-size: 15px;
+    color: var(--bw-muted);
+}
+
+.card h2 {
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--bw-primary);
+}
+
+.panel {
+    margin-bottom: 20px;
+}
+
+.panel h2 {
+    margin-top: 0;
+    font-size: 20px;
+    color: var(--bw-text);
+}
+
+/* Record rows */
+.data-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 4px;
+    border-bottom: 1px solid var(--bw-border);
+    font-size: 14px;
+}
+
+.data-row:last-child {
+    border-bottom: none;
+}
+
+.data-row strong {
+    color: var(--bw-primary-dark);
+    text-align: right;
+}
+
+/* Buttons */
+#add-order-btn,
+#add-review-btn,
+#save-order-btn,
+#reset-category-month {
+    background: var(--bw-primary);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 11px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+#add-order-btn:hover,
+#add-review-btn:hover,
+#save-order-btn:hover,
+#reset-category-month:hover {
+    background: var(--bw-primary-dark);
+    transform: translateY(-1px);
+}
+
+#cancel-order-btn {
+    background: #eee9f5;
+    color: #443755;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* Keep PayPal brand colour */
+.pay-btn {
+    background: #0070ba;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 11px 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.pay-btn:hover {
+    background: #005ea6;
+}
+
+/* Form inputs */
+#create-order-form input,
+#create-order-form select,
+#merchant-form input,
+#merchant-form select,
+#merchant-form textarea,
+#category-month {
+    border: 1px solid #dcd4e9;
+    border-radius: 10px;
+    padding: 11px 12px;
+    background: transparent;
+    color: var(--bw-text);
+    font-family: inherit;
+}
+
+#create-order-form input:focus,
+#create-order-form select:focus,
+#merchant-form input:focus,
+#merchant-form select:focus,
+#merchant-form textarea:focus,
+#category-month:focus {
+    outline: 2px solid #c4b5fd;
+    outline-offset: 1px;
+    border-color: var(--bw-primary);
+}
+
+/* Modal */
+.order-modal-content {
+    border-radius: 20px;
+    border: 1px solid var(--bw-border);
+    box-shadow: 0 20px 60px rgba(45, 25, 80, 0.2);
+}
+
+/* Chart filter */
+.chart-filter {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.chart-filter label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--bw-muted);
+}
+
+/* Embedded React pages */
+#merchant-page iframe,
+#coupon-page iframe {
+    width: 100%;
+    border: none;
+    border-radius: var(--bw-radius);
+    background: transparent;
+}
+
+/* Momo floating assistant */
+#bw-momo-toggle {
+    border: 2px solid #ddd0fb;
+    background: transparent;
+    box-shadow: 0 6px 24px rgba(124, 58, 237, 0.18);
+}
+
+#bw-momo-panel {
+    border: 1px solid #ddd0fb;
+    border-radius: 18px;
+    box-shadow: 0 12px 40px rgba(76, 29, 149, 0.16);
+}
+
+#bw-momo-panel h3 {
+    color: #4c1d95;
+}
+
+.bw-momo-actions button {
+    background: var(--bw-primary);
+    border-radius: 10px;
+}
+
+.bw-momo-actions button:hover {
+    background: var(--bw-primary-dark);
+}
+
+.bw-momo-actions button.secondary {
+    background: #eee9f5;
+    color: #443755;
+}
+
+/* Momo Guided Tour */
+.bw-tour-speech {
+    border-color: #c4b5fd;
+    border-radius: 20px;
+    box-shadow: 0 15px 50px rgba(76, 29, 149, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+    .app-layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .sidebar nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .nav-btn {
+        width: auto;
+    }
+
+    .main-content {
+        padding: 20px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .data-row {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+}
+
+
+
+/* ==========================================
+   BUYWISE AI - NIGHT SKY GLASS THEME
+   Clean Dashboard Version
+   ========================================== */
+
+:root {
+    --night-bg: #0b1028;
+    --night-text: #ffffff;
+    --night-muted: #ddd6fe;
+    --night-purple: #c4a5ff;
+    --glass-bg: rgba(255, 255, 255, 0.10);
+    --glass-border: rgba(255, 255, 255, 0.22);
+}
+
+/* ===== NIGHT SKY BACKGROUND ===== */
+
+body {
+    background-color: var(--night-bg) !important;
+
+    background-image:
+        radial-gradient(2px 2px at 15% 20%, white 98%, transparent),
+        radial-gradient(1px 1px at 35% 60%, #ddd6fe 98%, transparent),
+        radial-gradient(2px 2px at 70% 30%, white 98%, transparent),
+        radial-gradient(1px 1px at 90% 80%, #c4b5fd 98%, transparent),
+        linear-gradient(135deg, #090e24, #151638 55%, #261849) !important;
+
+    background-size:
+        320px 280px,
+        410px 350px,
+        370px 320px,
+        450px 390px,
+        cover;
+
+    background-attachment: fixed;
+}
+
+/* Transparent main page background */
+.main-content,
+.content,
+.content-area,
+.page-content,
+.dashboard-content,
+#dashboard-page {
+    background: transparent !important;
+}
+
+/* ===== DASHBOARD TITLE ===== */
+
+#dashboard-page h1,
+#dashboard-page h1 *,
+#dashboard-page .page-title,
+#dashboard-page .dashboard-title,
+#dashboard-page .page-header h1 {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+#dashboard-page .page-subtitle,
+#dashboard-page .welcome-text,
+#dashboard-page .page-header p {
+    color: #ddd6fe !important;
+}
+
+/* ===== GLASS CARDS ===== */
+
+#dashboard-page .card,
+#dashboard-page .panel,
+#dashboard-page .stat-card,
+#dashboard-page .summary-card,
+#dashboard-page .chart-card {
+    background: var(--glass-bg) !important;
+    background-image: none !important;
+
+    backdrop-filter: blur(18px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(140%) !important;
+
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 18px !important;
+
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+}
+
+/* ===== CARD TEXT ===== */
+
+#dashboard-page h2,
+#dashboard-page h3,
+#dashboard-page .card-title {
+    color: #ffffff !important;
+}
+
+#dashboard-page .card p,
+#dashboard-page .stat-card p,
+#dashboard-page .card-label,
+#dashboard-page .stat-label {
+    color: #e9ddff !important;
+}
+
+/* Important numbers */
+#dashboard-page .stat-value,
+#dashboard-page .metric-value,
+#dashboard-page .amount {
+    color: #ddd6fe !important;
+}
+
+/* ===== REMOVE INNER PIE CHART FRAME ===== */
+
+#dashboard-page .chart-container,
+#dashboard-page .chart-wrapper,
+#dashboard-page .chart-content,
+#dashboard-page .chart-inner {
+    background: transparent !important;
+    background-image: none !important;
+
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* ===== CATEGORY LIST ===== */
+
+#dashboard-page .data-row,
+#dashboard-page .data-row span,
+#dashboard-page .category-row,
+#dashboard-page .category-row span,
+#dashboard-page .category-name,
+#dashboard-page .category-label {
+    color: #e9ddff !important;
+}
+
+#dashboard-page .category-value,
+#dashboard-page .category-amount {
+    color: #e9ddff !important;
+    font-weight: 700;
+}
+
+#dashboard-page .data-row,
+#dashboard-page .category-row {
+    border-bottom-color: rgba(255,255,255,.20) !important;
+}
+
+/* ===== MONTH FILTER ===== */
+
+#dashboard-page .chart-filter label {
+    color: #e9ddff !important;
+}
+
+#dashboard-page input[type="month"] {
+    background: rgba(255,255,255,.10) !important;
+    color: #ffffff !important;
+
+    border: 1px solid rgba(255,255,255,.25) !important;
+    border-radius: 10px !important;
+    color-scheme: dark;
+}
+
+/* ===== HOVER ===== */
+
+#dashboard-page .card:hover,
+#dashboard-page .stat-card:hover {
+    background: rgba(255,255,255,.14) !important;
+    border-color: rgba(196,181,253,.45) !important;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 700px) {
+    #dashboard-page .card,
+    #dashboard-page .panel,
+    #dashboard-page .stat-card {
+        border-radius: 14px !important;
+    }
+}
+
+
+/* Correct Dashboard title selector */
+.topbar #page-title {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Welcome message */
+.topbar p {
+    color: #ddd6fe !important;
+}
+
+
+/* Remove inner Pie Chart frame */
+#dashboard-page .chart-container {
+    background: transparent !important;
+    background-image: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-radius: 0 !important;
+    padding: 10px 0 !important;
+}
+
+/* Keep outer panel as glass */
+#dashboard-page .panel {
+    background: rgba(255,255,255,0.10) !important;
+    border: 1px solid rgba(255,255,255,0.22) !important;
+    border-radius: 18px !important;
+    backdrop-filter: blur(18px) !important;
+    -webkit-backdrop-filter: blur(18px) !important;
+}
+
+
+/* ==========================================
+   NO RECORDS FOUND - NIGHT SKY TEXT
+   ========================================== */
+
+/* Empty records messages */
+#dashboard-page #monthly,
+#dashboard-page #categories,
+#orders-page #orders,
+#payments-page #payments,
+#delivery-page #delivery {
+    color: #e9ddff !important;
+}
+
+/* Empty state elements */
+.no-records,
+.empty-state,
+.no-data,
+.empty-message {
+    color: #e9ddff !important;
+}
+
+/* Text inside empty states */
+.no-records *,
+.empty-state *,
+.no-data *,
+.empty-message * {
+    color: #e9ddff !important;
+}
+
+
+/* ==========================================
+   BUYWISE AI - HISTORY PAGES GLASS THEME
+   Orders / Payments / Delivery
+   ========================================== */
+
+/* 1. Transparent page backgrounds */
+#orders-page,
+#payments-page,
+#delivery-page {
+    background: transparent !important;
+    color: #e9ddff !important;
+}
+
+/* 2. Main glass panels */
+#orders-page > .panel,
+#payments-page > .panel,
+#delivery-page > .panel {
+    background: rgba(255, 255, 255, 0.10) !important;
+    background-image: none !important;
+
+    backdrop-filter: blur(18px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(140%) !important;
+
+    border: 1px solid rgba(255, 255, 255, 0.22) !important;
+    border-radius: 18px !important;
+
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.16) !important;
+    padding: 25px !important;
+}
+
+/* 3. History section headings */
+#orders-page .orders-header h2,
+#payments-page .panel > h2,
+#delivery-page .panel > h2 {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    font-weight: 700 !important;
+}
+
+/* 4. Record text */
+#orders-page #orders,
+#payments-page #payments,
+#delivery-page #delivery {
+    color: #e9ddff !important;
+}
+
+/* 5. Record rows */
+#orders-page .data-row,
+#payments-page .data-row,
+#delivery-page .data-row {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 12px !important;
+    color: #e9ddff !important;
+    padding: 14px 16px !important;
+    margin-bottom: 10px !important;
+}
+
+/* 6. Text inside records */
+#orders-page .data-row span,
+#orders-page .data-row strong,
+#orders-page .data-row p,
+#payments-page .data-row span,
+#payments-page .data-row strong,
+#payments-page .data-row p,
+#delivery-page .data-row span,
+#delivery-page .data-row strong,
+#delivery-page .data-row p {
+    color: #e9ddff !important;
+}
+
+/* 7. Hover effect */
+#orders-page .data-row:hover,
+#payments-page .data-row:hover,
+#delivery-page .data-row:hover {
+    background: rgba(255, 255, 255, 0.12) !important;
+    border-color: rgba(196, 181, 253, 0.35) !important;
+}
+
+/* 8. Add Order button */
+#orders-page #add-order-btn {
+    background: #7c3aed !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 10px !important;
+    padding: 11px 20px !important;
+    font-weight: 600 !important;
+}
+
+#orders-page #add-order-btn:hover {
+    background: #6d28d9 !important;
+}
+
+/* 9. Create Order modal */
+#orders-page .order-modal-content {
+    background: #ffffff !important;
+    color: #241b35 !important;
+    border-radius: 18px !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35) !important;
+}
+
+/* Modal text stays dark for readability */
+#orders-page .order-modal-content h3,
+#orders-page .order-modal-content label {
+    color: #241b35 !important;
+}
+
+/* 10. Create Order form fields */
+#orders-page .order-modal-content input,
+#orders-page .order-modal-content select {
+    background: #ffffff !important;
+    color: #241b35 !important;
+    border: 1px solid #dcd4e9 !important;
+    border-radius: 10px !important;
+}
+
+/* 11. Create Order submit button */
+#orders-page #save-order-btn {
+    background: #7c3aed !important;
+    color: #ffffff !important;
+    border-radius: 10px !important;
+}
+
+/* 12. Cancel button */
+#orders-page #cancel-order-btn {
+    background: #f3e8ff !important;
+    color: #6d28d9 !important;
+    border-radius: 10px !important;
+}
+
+/* 13. Empty record messages */
+#orders-page .empty-state,
+#payments-page .empty-state,
+#delivery-page .empty-state,
+#orders-page .no-records,
+#payments-page .no-records,
+#delivery-page .no-records {
+    color: #e9ddff !important;
+}
+
+/* 14. Responsive layout */
+@media (max-width: 700px) {
+    #orders-page > .panel,
+    #payments-page > .panel,
+    #delivery-page > .panel {
+        padding: 18px !important;
+        border-radius: 14px !important;
+    }
+
+    #orders-page .data-row,
+    #payments-page .data-row,
+    #delivery-page .data-row {
+        padding: 12px !important;
+    }
+}
+
+
+/* ==========================================
+   BUYWISE AI - SELLER CREDIBILITY STYLE
+   Dashboard / Orders / Payments / Delivery
+   ========================================== */
+
+:root {
+    --bw-night: #10132e;
+    --bw-purple: #8056ed;
+    --bw-purple-dark: #392765;
+    --bw-lavender: #eee9f7;
+    --bw-text: #302348;
+    --bw-muted: #655779;
+}
+
+/* ===== 1. NIGHT SKY BACKGROUND ===== */
+
+body {
+    background-color: var(--bw-night) !important;
+}
+
+.main-content {
+    background: transparent !important;
+}
+
+/* ===== 2. PURPLE GRADIENT HEADER ===== */
+
+.main-content > .topbar {
+    background: linear-gradient(
+        115deg,
+        #392765 0%,
+        #513580 55%,
+        #7650a2 100%
+    ) !important;
+
+    border: 1px solid rgba(216, 193, 255, 0.45) !important;
+    border-radius: 22px !important;
+    padding: 32px 40px !important;
+    margin-bottom: 28px !important;
+    min-height: 170px;
+
+    display: flex;
+    align-items: center;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .15) !important;
+}
+
+/* Header title */
+.main-content > .topbar #page-title {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    font-size: clamp(26px, 3vw, 34px) !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.5px;
+    margin-bottom: 12px;
+}
+
+/* Welcome message */
+.main-content > .topbar p {
+    color: #e9ddff !important;
+    font-size: 14px;
+}
+
+/* ===== 3. PAGE BACKGROUND ===== */
+
+#dashboard-page,
+#orders-page,
+#payments-page,
+#delivery-page {
+    background: transparent !important;
+}
+
+/* ===== 4. LAVENDER CARDS ===== */
+
+#dashboard-page .card,
+#dashboard-page .panel,
+#orders-page > .panel,
+#payments-page > .panel,
+#delivery-page > .panel {
+    background: var(--bw-lavender) !important;
+    background-image: none !important;
+
+    border: 1px solid #cbb8ee !important;
+    border-radius: 20px !important;
+    padding: 28px !important;
+
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .12) !important;
+
+    color: var(--bw-text) !important;
+}
+
+/* ===== 5. CARD HEADINGS ===== */
+
+#dashboard-page .card h2,
+#dashboard-page .card h3,
+#dashboard-page .panel h2,
+#orders-page .panel h2,
+#payments-page .panel h2,
+#delivery-page .panel h2 {
+    color: var(--bw-text) !important;
+    -webkit-text-fill-color: var(--bw-text) !important;
+    font-weight: 750 !important;
+}
+
+/* ===== 6. STATISTICS ===== */
+
+#dashboard-page #total-spending,
+#dashboard-page #transaction-count {
+    color: #7549e9 !important;
+    -webkit-text-fill-color: #7549e9 !important;
+    font-size: 30px !important;
+    font-weight: 800 !important;
+}
+
+/* ===== 7. PIE CHART WITHOUT INNER FRAME ===== */
+
+#dashboard-page .chart-container {
+    background: transparent !important;
+    background-image: none !important;
+
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+
+    padding: 12px 0 !important;
+}
+
+/* ===== 8. CATEGORY AND MONTHLY TEXT ===== */
+
+#dashboard-page #categories,
+#dashboard-page #monthly,
+#dashboard-page .data-row,
+#dashboard-page .data-row span,
+#dashboard-page .category-name,
+#dashboard-page .category-label {
+    color: var(--bw-text) !important;
+}
+
+#dashboard-page .data-row,
+#dashboard-page .category-row {
+    border-bottom-color: #d4c7e7 !important;
+}
+
+/* ===== 9. MONTH FILTER ===== */
+
+#dashboard-page .chart-filter label {
+    color: var(--bw-text) !important;
+    font-weight: 600;
+}
+
+#dashboard-page input[type="month"] {
+    background: #ffffff !important;
+    color: var(--bw-text) !important;
+    border: 1px solid #cbb8ee !important;
+    border-radius: 12px !important;
+    color-scheme: light;
+}
+
+/* ===== 10. PURPLE BUTTONS ===== */
+
+#dashboard-page #reset-category-month,
+#orders-page #add-order-btn {
+    background: var(--bw-purple) !important;
+    color: #ffffff !important;
+
+    border: none !important;
+    border-radius: 12px !important;
+
+    font-weight: 700 !important;
+    padding: 11px 20px !important;
+}
+
+#dashboard-page #reset-category-month:hover,
+#orders-page #add-order-btn:hover {
+    background: #6940dc !important;
+}
+
+/* ===== 11. HISTORY RECORD TEXT ===== */
+
+#orders-page #orders,
+#payments-page #payments,
+#delivery-page #delivery {
+    color: var(--bw-text) !important;
+}
+
+/* Record rows */
+#orders-page .data-row,
+#payments-page .data-row,
+#delivery-page .data-row {
+    background: rgba(255, 255, 255, .55) !important;
+
+    border: 1px solid #d4c7e7 !important;
+    border-radius: 12px !important;
+
+    color: var(--bw-text) !important;
+    padding: 14px 16px !important;
+    margin-bottom: 10px !important;
+}
+
+/* Text inside records */
+#orders-page .data-row span,
+#orders-page .data-row strong,
+#payments-page .data-row span,
+#payments-page .data-row strong,
+#delivery-page .data-row span,
+#delivery-page .data-row strong {
+    color: var(--bw-text) !important;
+}
+
+/* ===== 12. KEEP CREATE ORDER MODAL READABLE ===== */
+
+#orders-page .order-modal-content {
+    background: #ffffff !important;
+    color: var(--bw-text) !important;
+    border-radius: 18px !important;
+}
+
+#orders-page .order-modal-content h3,
+#orders-page .order-modal-content label {
+    color: var(--bw-text) !important;
+}
+
+#orders-page .order-modal-content input,
+#orders-page .order-modal-content select {
+    background: #ffffff !important;
+    color: var(--bw-text) !important;
+    border: 1px solid #cbb8ee !important;
+}
+
+#orders-page #save-order-btn {
+    background: var(--bw-purple) !important;
+    color: white !important;
+}
+
+#orders-page #cancel-order-btn {
+    background: #eee9f7 !important;
+    color: #513580 !important;
+}
+
+/* ===== 13. RESPONSIVE ===== */
+
+@media (max-width: 700px) {
+    .main-content > .topbar {
+        min-height: 130px;
+        padding: 24px !important;
+        border-radius: 16px !important;
+    }
+
+    #dashboard-page .card,
+    #dashboard-page .panel,
+    #orders-page > .panel,
+    #payments-page > .panel,
+    #delivery-page > .panel {
+        padding: 20px !important;
+        border-radius: 16px !important;
+    }
+}
+
+
+/* ==========================================
+   BUYWISE AI - PIE CHART POLISH
+   ========================================== */
+
+/* Chart container */
+#dashboard-page .chart-container {
+    width: 100% !important;
+    height: 390px !important;
+    max-width: 850px !important;
+    margin: 15px auto 20px !important;
+    padding: 10px 20px !important;
+
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Chart canvas */
+#dashboard-page #categoryPieChart {
+    display: block !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+}
+
+/* Category list below chart */
+#dashboard-page #categories {
+    margin-top: 18px !important;
+    color: #392765 !important;
+}
+
+/* Category text */
+#dashboard-page #categories .data-row,
+#dashboard-page #categories .data-row span {
+    color: #392765 !important;
+}
+
+/* Category amounts */
+#dashboard-page #categories strong {
+    color: #7549e9 !important;
+    font-weight: 700 !important;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    #dashboard-page .chart-container {
+        height: 320px !important;
+        padding: 8px !important;
+    }
+}
+
+/* ==========================================
+   FIX ORDER HISTORY TEXT COLOUR
+   ========================================== */
+
+/* Order ID and merchant name */
+#orders-page #orders .data-row strong {
+    color: #302348 !important;
+    -webkit-text-fill-color: #302348 !important;
+}
+
+/* Platform, price, status and product name */
+#orders-page #orders .data-row p {
+    color: #51416e !important;
+    -webkit-text-fill-color: #51416e !important;
+    opacity: 1 !important;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Overall order card */
+#orders-page #orders .data-row {
+    background: rgba(255, 255, 255, 0.65) !important;
+    border: 1px solid #d4c7e7 !important;
+    border-radius: 12px;
+}
+
+/* Payment and delivery record text */
+#payments-page #payments .data-row,
+#delivery-page #delivery .data-row {
+    color: #302348 !important;
+}
+
+
+/* ==========================================
+   DASHBOARD QUICK ACCESS
+   ========================================== */
+
+#dashboard-page .quick-access-panel {
+    background: #eee9f7 !important;
+    border: 1px solid #cbb8ee !important;
+    border-radius: 20px !important;
+    padding: 28px !important;
+    margin-bottom: 20px;
+}
+
+#dashboard-page .quick-access-panel h2 {
+    color: #302348 !important;
+    font-size: 22px;
+    margin: 0 0 8px;
+}
+
+#dashboard-page .quick-access-subtitle {
+    color: #655779 !important;
+    font-size: 14px;
+    margin: 0 0 22px;
+}
+
+#dashboard-page .quick-access-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 14px;
+}
+
+#dashboard-page .quick-access-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-width: 0;
+    min-height: 125px;
+    padding: 18px 10px;
+
+    background: #ffffff;
+    border: 1px solid #cbb8ee;
+    border-radius: 16px;
+
+    color: #302348;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s,
+                background 0.2s, border-color 0.2s;
+}
+
+#dashboard-page .quick-access-icon {
+    font-size: 32px;
+    line-height: 1.2;
+}
+
+#dashboard-page .quick-access-btn:hover {
+    background: #f5edff;
+    border-color: #8056ed;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(128, 86, 237, 0.18);
+}
+
+#dashboard-page .quick-access-btn:focus-visible {
+    outline: 3px solid #8056ed;
+    outline-offset: 3px;
+}
+
+/* Tablet */
+@media (max-width: 1100px) {
+    #dashboard-page .quick-access-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    #dashboard-page .quick-access-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #dashboard-page .quick-access-btn {
+        min-height: 105px;
+    }
+}
+
+
+/* ==========================================
+   BUYWISE AI - PARCEL TRACKING DASHBOARD
+   ========================================== */
+
+#delivery-page .delivery-panel {
+    background: #eee9f7 !important;
+    border: 1px solid #cbb8ee !important;
+    border-radius: 20px !important;
+    padding: 28px !important;
+    color: #302348 !important;
+}
+
+.delivery-heading h2 {
+    margin: 0 0 8px;
+    color: #302348 !important;
+}
+
+.delivery-heading p {
+    margin: 0 0 24px;
+    color: #655779 !important;
+    font-size: 14px;
+}
+
+/* Summary cards */
+.delivery-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.delivery-stat-card {
+    background: #ffffff;
+    border: 1px solid #d4c7e7;
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.delivery-stat-card span {
+    color: #655779;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.delivery-stat-card h3 {
+    color: #7549e9;
+    font-size: 30px;
+    margin: 12px 0 0;
+}
+
+/* Search and filter */
+.delivery-toolbar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+#delivery-search,
+#delivery-filter {
+    padding: 13px 15px;
+    background: #ffffff;
+    color: #302348;
+    border: 1px solid #d4c7e7;
+    border-radius: 12px;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+#delivery-search {
+    flex: 1;
+    min-width: 0;
+}
+
+#delivery-filter {
+    min-width: 155px;
+}
+
+#delivery-search:focus,
+#delivery-filter:focus {
+    outline: 2px solid #8056ed;
+    outline-offset: 2px;
+}
+
+/* Parcel cards */
+#delivery-page #delivery .parcel-card {
+    background: #ffffff !important;
+    border: 1px solid #d4c7e7 !important;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    color: #302348 !important;
+}
+
+.parcel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.parcel-order-id {
+    font-weight: 700;
+    color: #302348;
+    font-size: 16px;
+}
+
+.parcel-status {
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.parcel-status.in-transit {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.parcel-status.delivered {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.parcel-info {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.parcel-info-label {
+    color: #655779;
+    font-size: 12px;
+    margin-bottom: 6px;
+}
+
+.parcel-info-value {
+    color: #302348;
+    font-size: 14px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+/* Tracking progress */
+.parcel-timeline {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin: 20px 0;
+}
+
+.parcel-step {
+    flex: 1;
+    text-align: center;
+    color: #998bab;
+    font-size: 12px;
+}
+
+.parcel-step-icon {
+    width: 38px;
+    height: 38px;
+    margin: 0 auto 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eee9f7;
+    border-radius: 50%;
+    font-size: 18px;
+}
+
+.parcel-step.active .parcel-step-icon {
+    background: #8056ed;
+    color: white;
+}
+
+.parcel-step.active {
+    color: #392765;
+    font-weight: 700;
+}
+
+.parcel-message {
+    background: #f7f3fd;
+    color: #51416e;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.parcel-details {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid #e6dcf2;
+}
+
+.parcel-details summary {
+    color: #7549e9;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 8px 0;
+}
+
+.parcel-details-content {
+    padding-top: 14px;
+}
+
+.parcel-copy-btn {
+    background: #8056ed;
+    color: #ffffff;
+    border: none;
+    border-radius: 9px;
+    padding: 10px 14px;
+    margin-top: 12px;
+    cursor: pointer;
+}
+
+.parcel-copy-btn:hover {
+    background: #6940dc;
+}
+
+.parcel-empty {
+    padding: 24px;
+    text-align: center;
+    color: #51416e;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+    .delivery-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .delivery-toolbar {
+        flex-direction: column;
+    }
+
+    .parcel-info {
+        grid-template-columns: 1fr;
+    }
+
+    .parcel-step {
+        font-size: 10px;
+    }
+}
+
+
+/* ==========================================
+   MOMO SMART GUIDED TOUR POSITIONING
+   ========================================== */
+
+.bw-tour-overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 20000 !important;
+    pointer-events: none;
+}
+
+.bw-tour-backdrop {
+    position: absolute;
+    inset: 0;
+    pointer-events: auto;
+}
+
+.bw-tour-speech {
+    position: fixed !important;
+
+    /* JavaScript controls these coordinates */
+    left: 0;
+    top: 0;
+    transform: none !important;
+
+    width: min(370px, calc(100vw - 32px));
+    max-height: calc(100vh - 32px);
+
+    overflow-y: auto !important;
+    box-sizing: border-box;
+
+    background: #ffffff !important;
+    color: #31215a !important;
+
+    border: 2px solid #c4b5fd !important;
+    border-radius: 20px !important;
+
+    padding: 24px 22px 20px !important;
+
+    z-index: 20002 !important;
+    pointer-events: auto !important;
+
+    box-shadow: 0 15px 50px rgba(76, 29, 149, 0.25);
+}
+
+.bw-tour-highlight {
+    position: relative !important;
+    z-index: 20001 !important;
+    outline: 3px solid #a78bfa !important;
+    outline-offset: 5px;
+    border-radius: 16px;
+}
+
+#bw-tour-description {
+    color: #5b4b78 !important;
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 700px) {
+    .bw-tour-speech {
+        width: calc(100vw - 24px);
+        max-height: calc(100vh - 24px);
+        padding: 20px 16px !important;
+    }
+}
+
+
+/* ==========================================
+   UNIVERSAL MOMO TOUR SPOTLIGHT
+   Dashboard / Orders / Payments / Delivery
+   ========================================== */
+
+.bw-tour-overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 20000 !important;
+    pointer-events: none;
+}
+
+.bw-tour-backdrop {
+    position: fixed !important;
+    inset: 0 !important;
+    background: transparent !important;
+    pointer-events: auto;
+}
+
+.bw-tour-spotlight {
+    position: fixed !important;
+    z-index: 1 !important;
+    display: none;
+
+    box-sizing: border-box;
+    border: 3px solid #a78bfa;
+    border-radius: 18px;
+
+    box-shadow:
+        0 0 0 9999px rgba(12, 8, 35, 0.65),
+        0 0 22px rgba(167, 139, 250, 0.85);
+
+    pointer-events: none;
+}
+
+.bw-tour-speech {
+    position: fixed !important;
+    z-index: 2 !important;
+    pointer-events: auto;
+}
+
+/* The spotlight reveals the original UI colors.
+   Avoid forcing a different background or text color. */
+.bw-tour-highlight {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Ensure the selected element keeps its normal appearance */
+.bw-tour-highlight h1,
+.bw-tour-highlight h2,
+.bw-tour-highlight h3,
+.bw-tour-highlight p,
+.bw-tour-highlight span {
+    opacity: inherit;
+}
+
+
+/* FIX: Prevent Momo's head from being cut off */
+
+.bw-tour-speech {
+    padding-top: 85px !important;
+    overflow: visible !important;
+}
+
+.bw-tour-mascot {
+    position: absolute !important;
+    top: 4px !important;
+    right: 45px !important;
+    width: 78px !important;
+    height: 78px !important;
+    z-index: 5 !important;
+}
+
+.bw-tour-mascot img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+}
+
+
+/* Keep Momo and the dialogue above the spotlight */
+
+.bw-tour-overlay {
+    z-index: 20000 !important;
+    isolation: isolate;
+}
+
+.bw-tour-backdrop {
+    z-index: 0 !important;
+}
+
+.bw-tour-spotlight {
+    z-index: 1 !important;
+    pointer-events: none !important;
+}
+
+.bw-tour-speech {
+    z-index: 10 !important;
+    position: fixed !important;
+    overflow: visible !important;
+    box-sizing: border-box;
+}
+
+.bw-tour-mascot {
+    z-index: 11 !important;
+    pointer-events: none !important;
+}
+
+
+/* MOMO TOUR - FINAL POSITION AND LAYER FIX */
+
+.bw-tour-overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 20000 !important;
+    isolation: isolate;
+    pointer-events: none;
+}
+
+.bw-tour-backdrop {
+    z-index: 0 !important;
+}
+
+.bw-tour-spotlight {
+    z-index: 1 !important;
+    pointer-events: none !important;
+}
+
+.bw-tour-speech {
+    position: fixed !important;
+    z-index: 10 !important;
+    transform: none !important;
+    overflow: visible !important;
+    box-sizing: border-box;
+}
+
+.bw-tour-mascot {
+    z-index: 11 !important;
+    pointer-events: none !important;
+}
+
+
+/* ==========================================
+   MOMO TOUR - FIX PANEL COVERING DIALOGUE
+   ========================================== */
+
+/* Keep the whole tour above the website */
+.bw-tour-overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 20000 !important;
+    isolation: isolate;
+    pointer-events: none;
+}
+
+/* Do not elevate highlighted panels above Momo */
+.bw-tour-highlight {
+    z-index: auto !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Darken surroundings without darkening selected area */
+.bw-tour-backdrop {
+    z-index: 0 !important;
+    background: transparent !important;
+}
+
+/* Spotlight sits above the website */
+.bw-tour-spotlight {
+    z-index: 1 !important;
+    pointer-events: none !important;
+}
+
+/* Momo dialogue must sit above the spotlight */
+.bw-tour-speech {
+    position: fixed !important;
+    z-index: 10 !important;
+    transform: none !important;
+    overflow: visible !important;
+    pointer-events: auto !important;
+}
+
+/* Keep Momo's whole image inside the dialogue */
+.bw-tour-mascot {
+    position: absolute !important;
+    top: 5px !important;
+    right: 40px !important;
+    width: 78px !important;
+    height: 78px !important;
+    z-index: 11 !important;
+    pointer-events: none !important;
+}
+
+.bw-tour-mascot img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+}
+

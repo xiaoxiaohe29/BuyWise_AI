@@ -1,0 +1,462 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Shopping</title>
+    <link rel="stylesheet" href="/shopping/frontend/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/shopping/frontend/script.js" defer></script>
+</head>
+<body>
+
+    
+<div class="app-layout">
+
+    <aside class="sidebar">
+        <h2>🛍️ Smart Shopping</h2>
+        <p class="sidebar-subtitle">Shopping Management</p>
+
+        <nav>
+            <button class="nav-btn active" data-page="dashboard">
+                📊 Dashboard
+            </button>
+            <button class="nav-btn" data-page="orders">
+                🛒 Orders
+            </button>
+            <button class="nav-btn" data-page="payments">
+                💳 Payments
+            </button>
+            <button class="nav-btn" data-page="delivery">
+                📦 Delivery
+            </button>
+            <button class="nav-btn" data-page="merchant">
+                🛡️ Seller Credibility
+            </button>
+            <button class="nav-btn" data-page="coupon">
+                🎟️ Coupon & Bundle Advisor
+            </button>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h1 id="page-title">Dashboard</h1>
+                <p>Welcome back, user001 👋</p>
+            </div>
+        </header>
+
+        <section id="dashboard-page" class="page active">
+            <div class="cards">
+                <div class="card">
+                    <h3>Total Spending</h3>
+                    <h2 id="total-spending">Loading...</h2>
+                </div>
+
+                <div class="card">
+                    <h3>Transactions</h3>
+                    <h2 id="transaction-count">Loading...</h2>
+                </div>
+            </div>
+
+
+        <!-- Dashboard Quick Access -->
+        <div class="panel quick-access-panel">
+            <h2>🚀 Quick Access</h2>
+            <p class="quick-access-subtitle">
+                Navigate to your shopping tools
+            </p>
+
+        <div class="quick-access-grid">
+            <button type="button" class="quick-access-btn" data-target="orders">
+                <span class="quick-access-icon">🛒</span>
+                <span>Orders</span>
+            </button>
+
+            <button type="button" class="quick-access-btn" data-target="payments">
+                <span class="quick-access-icon">💳</span>
+                <span>Payments</span>
+            </button>
+
+            <button type="button" class="quick-access-btn" data-target="delivery">
+                <span class="quick-access-icon">📦</span>
+                <span>Delivery</span>
+            </button>
+
+            <button type="button" class="quick-access-btn" data-target="merchant">
+                <span class="quick-access-icon">🛡️</span>
+                <span>Seller Credibility</span>
+            </button>
+
+            <button type="button" class="quick-access-btn" data-target="coupon">
+                <span class="quick-access-icon">🎟️</span>
+                <span>Coupon &amp; Bundle Advisor</span>
+            </button>
+        </div>
+    </div>
+
+
+            
+            <div class="panel">
+                <h2>📊 Spending by Category (USD)</h2>
+                
+                <div class="chart-filter">
+                    <label for="category-month">Select Month:</label>
+
+                    <input
+                        type="month"
+                        id="category-month"
+                    >
+
+                    <button type="button" id="reset-category-month">
+                        All Time
+                    </button>
+            </div>
+
+                <div class="chart-container">
+                    <canvas id="categoryPieChart"></canvas>
+                </div>
+
+                <div id="categories">Loading...</div>
+            </div>
+
+
+            <div class="panel">
+                <h2>📅 Monthly Spending</h2>
+                <div id="monthly">Loading...</div>
+            </div>
+        </section>
+
+<!-- Seller Credibility -->
+<section id="merchant-page" class="page">
+
+    <iframe
+        src="/seller-credibility/?embedded=1"
+        title="Seller Credibility Advisor"
+        style="
+            width: 100%;
+            height: 85vh;
+            min-height: 650px;
+            border: none;
+            border-radius: 12px;
+            background: white;
+        "
+    ></iframe>
+
+</section>
+
+<section id="coupon-page" class="page">
+    <iframe
+        src="/coupon-bundle/?embedded=1"
+        title="Coupon & Bundle Advisor"
+        style="width:100%;height:85vh;min-height:650px;border:none;border-radius:12px;background:white;"
+    ></iframe>
+</section>
+        
+<section id="orders-page" class="page">
+    <div class="panel">
+
+        <div class="orders-header">
+            <h2>🛒 Order History</h2>
+            <button type="button" id="add-order-btn">
+                + Order
+            </button>
+        </div>
+
+        <!-- Create Order Form -->
+        <div id="order-form-container" class="order-modal" hidden>
+            <div class="order-modal-content">
+            <h3>Create New Order</h3>
+
+            <form id="create-order-form">
+
+                <label for="merchant-name">Merchant Name</label>
+                <input
+                    type="text"
+                    id="merchant-name"
+                    placeholder="e.g. Amazon"
+                    required
+                >
+
+                <label for="order-platform">Platform</label>
+                <select id="order-platform" required>
+                    <option value="Amazon">Amazon</option>
+                    <option value="eBay">eBay</option>
+                    <option value="Etsy">Etsy</option>
+                    <option value="TikTok">TikTok</option>
+                    <option value="Shein">Shein</option>
+                    <option value="Zalora">Zalora</option>
+                    <option value="Physical Store">Physical Store</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <label for="order-currency">Currency</label>
+                <select id="order-currency" required>
+                    <option value="MYR">MYR</option>
+                    <option value="USD">USD</option>
+                    <option value="CNY">CNY</option>
+                    <option value="EUR">EUR</option>
+                </select>
+
+                <label for="product-name">Product Name</label>
+                <input
+                    type="text"
+                    id="product-name"
+                    placeholder="e.g. Bluetooth Speaker"
+                    required
+                >
+
+                <label for="product-category">Category</label>
+                <select id="product-category" required>
+                    <option value="" disabled selected>Select a category</option>
+                    <option value="Household">Household</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Food & Beverage">Food & Beverage</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Clothing">Clothing</option>
+                    <option value="Accessories">Accessories</option>
+                    <option value="Education">Education</option>
+                    <option value="Health & Wellness">Health & Wellness</option>
+                    <option value="Transportation">Transportation</option>
+                    <option value="Others">Others</option>
+                </select>
+
+                <label for="product-quantity">Quantity</label>
+                <input
+                    type="number"
+                    id="product-quantity"
+                    min="1"
+                    step="1"
+                    value="1"
+                    required
+                >
+
+                <label for="product-price">Unit Price</label>
+                <input
+                    type="number"
+                    id="product-price"
+                    min="0.01"
+                    step="0.01"
+                    placeholder="e.g. 59.90"
+                    required
+                >
+
+                <div class="order-form-actions">
+                    <button type="submit" id="save-order-btn">
+                        Create Order
+                    </button>
+
+                    <button type="button" id="cancel-order-btn">
+                        Cancel
+                    </button>
+                </div>
+
+                <p id="order-form-message" role="status"></p>
+            </form>
+        </div>
+    </div>
+
+        <!-- Existing Order History -->
+        <div id="orders">Loading...</div>
+
+    </div>
+</section>
+
+
+        <section id="payments-page" class="page">
+            <div class="panel">
+                <h2>💳 Payment History</h2>
+                <div id="payments">Loading...</div>
+            </div>
+        </section>
+
+        <!-- DELIVERY TRACKING PAGE -->
+        <section id="delivery-page" class="page">
+
+            <div class="panel delivery-panel">
+
+                <div class="delivery-heading">
+                    <div>
+                        <h2>📦 Delivery Tracking</h2>
+                        <p>Monitor your orders and parcel journeys</p>
+                    </div>
+                </div>
+
+                <!-- Parcel Summary -->
+                <div class="delivery-stats">
+
+                    <div class="delivery-stat-card">
+                        <span>📦 Total Parcels</span>
+                        <h3 id="delivery-total">0</h3>
+                    </div>
+
+                    <div class="delivery-stat-card">
+                        <span>🚚 In Transit</span>
+                        <h3 id="delivery-transit">0</h3>
+                    </div>
+
+                    <div class="delivery-stat-card">
+                        <span>✅ Delivered</span>
+                        <h3 id="delivery-delivered">0</h3>
+                    </div>
+
+                </div>
+
+                <!-- Search -->
+                <div class="delivery-toolbar">
+
+                    <input
+                        type="search"
+                        id="delivery-search"
+                        placeholder="Search order or tracking number..."
+                        aria-label="Search parcels"
+                    >
+
+                    <select id="delivery-filter"
+                            aria-label="Filter delivery status">
+                        <option value="ALL">All Parcels</option>
+                        <option value="NOT_SHIPPED">Not Shipped</option>
+                        <option value="IN_TRANSIT">In Transit</option>
+                        <option value="DELIVERED">Delivered</option>
+                    </select>
+
+                </div>
+
+                <!-- Delivery Records -->
+                <div id="delivery" aria-live="polite">
+                    Loading deliveries...
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+</div>
+
+
+<!-- Momo Floating Assistant -->
+<style>
+  #bw-momo {
+    position: fixed;
+    right: 20px;
+    bottom: 18px;
+    z-index: 10000;
+    font-family: Arial, sans-serif;
+  }
+
+  #bw-momo-toggle {
+    width: 78px;
+    height: 78px;
+    border: 0;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 5px 22px #0003;
+    cursor: pointer;
+    padding: 5px;
+  }
+
+  #bw-momo-toggle img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  #bw-momo-panel {
+    position: absolute;
+    bottom: 90px;
+    right: 0;
+    width: min(330px, calc(100vw - 32px));
+    background: white;
+    color: #1f2937;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    box-shadow: 0 12px 40px #0003;
+    padding: 18px;
+  }
+
+  #bw-momo-panel[hidden] {
+    display: none;
+  }
+
+  #bw-momo-panel h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+  }
+
+  #bw-momo-message {
+    line-height: 1.5;
+    font-size: 14px;
+    margin: 8px 0 14px;
+  }
+
+  .bw-momo-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .bw-momo-actions button {
+    border: 0;
+    background: #4f46e5;
+    color: white;
+    border-radius: 8px;
+    padding: 9px 12px;
+    cursor: pointer;
+  }
+
+  .bw-momo-actions button.secondary {
+    background: #e5e7eb;
+    color: #111827;
+  }
+
+  #bw-momo-close {
+    float: right;
+    background: none;
+    border: 0;
+    font-size: 20px;
+    cursor: pointer;
+    color: #374151;
+  }
+</style>
+
+<div id="bw-momo">
+  <div id="bw-momo-panel" hidden role="dialog"
+       aria-label="Momo shopping guide">
+
+    <button id="bw-momo-close" type="button"
+            aria-label="Close guide">×</button>
+
+    <h3>🐑 Momo's Guide</h3>
+
+    <p id="bw-momo-message" aria-live="polite"></p>
+
+    <div class="bw-momo-actions">
+      <button id="bw-momo-next" type="button">Next tip</button>
+      <button id="bw-momo-tour" type="button">Start page tour</button>
+      <button id="bw-momo-nav" type="button" class="secondary">
+        Go to page
+      </button>
+    </div>
+  </div>
+
+    <button
+        id="bw-momo-toggle"
+        type="button"
+        aria-label="Open Momo guide"
+        aria-expanded="false"
+    >
+        <img
+            src="/shopping/frontend/momo.png?v=3"
+            alt="Momo the sheep"
+            style="width:100%;height:100%;object-fit:cover;"
+        >
+    </button>
+</div>
+
+</body>
+</html>

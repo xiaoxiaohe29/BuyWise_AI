@@ -1,0 +1,264 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BuyWise AI</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f7fb;
+    margin: 0;
+    color: #263246;
+}
+
+header {
+    background: #173b73;
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+main {
+    max-width: 850px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px #00000012;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+input, textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    margin-top: 7px;
+    border: 1px solid #ccd5e2;
+    border-radius: 7px;
+    font: inherit;
+}
+
+textarea {
+    min-height: 85px;
+}
+
+.checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.checkbox-row input {
+    width: auto;
+    margin: 0;
+}
+
+.checkbox-row label {
+    margin: 0;
+}
+
+button {
+    background: #173b73;
+    color: white;
+    border: none;
+    padding: 14px 22px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+button:hover {
+    background: #285da5;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+.result-section {
+    margin-top: 15px;
+    padding: 15px;
+    background: #f2f6fc;
+    border-radius: 8px;
+}
+
+.note {
+    color: #657185;
+    font-size: 13px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>BuyWise AI</h1>
+    <p>Understand product reviews, seller evidence and return feedback</p>
+</header>
+
+<main>
+
+<section class="card">
+    <h2>Analyze a Product</h2>
+
+    <form id="productForm">
+
+        <label for="productName">Product Name</label>
+        <input id="productName" value="Wireless Headphones" required>
+
+        <label for="reviewText">Customer Review</label>
+        <textarea id="reviewText" required>The headphones work perfectly.</textarea>
+
+        <label for="sellerRating">Seller Rating (0–5)</label>
+        <input id="sellerRating" type="number"
+               min="0" max="5" step="0.1" value="4.7" required>
+
+        <label for="totalReviews">Total Seller Reviews</label>
+        <input id="totalReviews" type="number"
+               min="0" step="1" value="250" required>
+
+        <div class="checkbox-row">
+            <input id="returnPolicy" type="checkbox" checked>
+            <label for="returnPolicy">Return policy available</label>
+        </div>
+
+        <div class="checkbox-row">
+            <input id="verifiedSeller" type="checkbox" checked>
+            <label for="verifiedSeller">Seller verification confirmed</label>
+        </div>
+
+        <label for="returnReasons">Return Feedback (one reason per line)</label>
+        <textarea id="returnReasons">The headphones stopped working after two days.
+My package never arrived.</textarea>
+
+        <button id="analyzeButton" type="submit">Analyze Product</button>
+    </form>
+</section>
+
+<section class="card" id="results" hidden>
+    <h2>Product Intelligence Report</h2>
+    <div id="reportContent"></div>
+</section>
+
+</main>
+
+<script>
+const form = document.getElementById("productForm");
+const button = document.getElementById("analyzeButton");
+const results = document.getElementById("results");
+const reportContent = document.getElementById("reportContent");
+
+function addParagraph(parent, label, value) {
+    const p = document.createElement("p");
+    const strong = document.createElement("strong");
+    strong.textContent = label + ": ";
+    p.appendChild(strong);
+    p.appendChild(document.createTextNode(String(value)));
+    parent.appendChild(p);
+}
+
+function addSection(title) {
+    const section = document.createElement("div");
+    section.className = "result-section";
+
+    const heading = document.createElement("h3");
+    heading.textContent = title;
+    section.appendChild(heading);
+
+    reportContent.appendChild(section);
+    return section;
+}
+
+form.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    button.disabled = true;
+    button.textContent = "Analyzing...";
+    results.hidden = false;
+    reportContent.textContent = "Loading report...";
+
+    const data = {
+        product_name: document.getElementById("productName").value,
+        review_text: document.getElementById("reviewText").value,
+        seller: {
+            rating: Number(document.getElementById("sellerRating").value),
+            total_reviews: Number(document.getElementById("totalReviews").value),
+            return_policy_available: document.getElementById("returnPolicy").checked,
+            verified_seller: document.getElementById("verifiedSeller").checked
+        },
+        return_reasons: document.getElementById("returnReasons").value
+            .split("\n")
+            .map(x => x.trim())
+            .filter(x => x.length > 0)
+    };
+
+    try {
+        const response = await fetch("/product-report", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            throw new Error("API returned HTTP " + response.status);
+        }
+
+        const report = await response.json();
+        reportContent.replaceChildren();
+
+        addParagraph(reportContent, "Product", report.product_name);
+
+        const review = addSection("Review Pattern Analysis");
+        addParagraph(review, "Assessment", report.review_analysis.result);
+        addParagraph(review, "Class 1 model score",
+            report.review_analysis.model_score);
+
+        const seller = addSection("Seller Evidence");
+        addParagraph(seller, "Demonstration evidence score",
+            report.seller_assessment.evidence_score + "/100");
+        addParagraph(seller, "Observations",
+            report.seller_assessment.observations.join("; ") || "None");
+
+        const returns = addSection("Return Feedback");
+        if (report.return_analysis.length === 0) {
+            addParagraph(returns, "Status", "No return feedback supplied");
+        } else {
+            report.return_analysis.forEach((item, index) => {
+                addParagraph(returns, "Feedback " + (index + 1),
+                    item.matched_categories.join(", ") || item.category);
+            });
+        }
+
+        const note = document.createElement("p");
+        note.className = "note";
+        note.textContent = report.disclaimer;
+        reportContent.appendChild(note);
+
+    } catch (error) {
+        reportContent.textContent =
+            "Unable to generate report: " + error.message;
+    } finally {
+        button.disabled = false;
+        button.textContent = "Analyze Product";
+    }
+});
+</script>
+
+</body>
+</html>
